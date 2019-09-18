@@ -1,20 +1,23 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actionCreators } from './store/index';
+
 import { Input } from 'antd';
 
 const LocationInput = ({ locationEntered, handleInputChange }) => {
+  const autocompleteInput = React.createRef();
   return (
     <Fragment>
-      <Input
+      <input
+        ref={autocompleteInput}
         placeholder='Please enter location here'
-        name='location'
-        id='location'
+        name='autocomplete'
+        id='autocomplete'
         value={locationEntered}
-        onChange={event => handleInputChange(event)}
+        onChange={event => handleInputChange(event, autocompleteInput)}
       />
-      <button>submit</button>
+      <div>123</div>
     </Fragment>
   );
 };
@@ -24,11 +27,22 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = dispatch => ({
-  handleInputChange(event) {
+  handleInputChange(event, autocompleteInput) {
+    event.persist();
+
+    let autocomplete = new google.maps.places.Autocomplete(
+      autocompleteInput.current
+    );
+
     const action = actionCreators.handleInputChangeAction(event);
     dispatch(action);
   }
 });
+
+LocationInput.propTypes = {
+  locationEntered: PropTypes.string,
+  handleInputChange: PropTypes.func.isRequired
+};
 
 export default connect(
   mapStateToProps,

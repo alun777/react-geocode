@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Form from './components/Form/Form';
+import LocationForm from './components/LocationForm/LocationForm';
 import './App.css';
 import { Provider } from 'react-redux';
 import store from './store/index';
@@ -7,7 +7,7 @@ import store from './store/index';
 const App = () => (
   <Provider store={store}>
     <Fragment>
-      <Form />
+      <LocationForm />
     </Fragment>
   </Provider>
 );

@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 import { constants } from './index';
 
 const defaultState = fromJS({
-  locationEntered: null
+  locationEntered: ''
 });
 
 export default (state = defaultState, action) => {
