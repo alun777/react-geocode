@@ -1,0 +1,26 @@
+{
+  "presets": [
+    "@babel/preset-react",
+    [
+      "@babel/preset-env",
+      {
+        "targets": "> 0.25%, not dead"
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["require-context-hook", "@babel/plugin-transform-runtime"]
+    }
+  },
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": "css"
+      }
+    ]
+  ]
+}
