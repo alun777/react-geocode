@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+
+import { Form } from 'semantic-ui-react';
 
 const LocationButton = () => {
   return (
-    <div className='form__button'>
-      <button>Submit</button>
-    </div>
+    <Fragment>
+      <Form.Button primary>Submit</Form.Button>
+      <Form.Button>Reset</Form.Button>
+    </Fragment>
   );
 };
 

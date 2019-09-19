@@ -3,20 +3,22 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actionCreators } from './store/index';
 
+import { Form } from 'semantic-ui-react';
+
 const LocationInput = ({ locationEntered, handleInputChange }) => {
-  const autocompleteInput = React.createRef();
+  let autocompleteInput = React.createRef();
   return (
-    <Fragment>
+    <div className='ui input field eight wide'>
       <input
-        className='form__input'
+        type='text'
         ref={autocompleteInput}
         placeholder='Please enter location here'
-        name='autocomplete'
-        id='autocomplete'
+        name='locationInput'
+        id='locationInput'
         value={locationEntered}
         onChange={event => handleInputChange(event, autocompleteInput)}
       />
-    </Fragment>
+    </div>
   );
 };
 

@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react';
-import LocationForm from './components/LocationForm/LocationForm';
-import './App.css';
 import { Provider } from 'react-redux';
 import store from './store/index';
+
+import LocationForm from './components/LocationForm/LocationForm';
+
+import './App.css';
 
 const App = () => (
   <Provider store={store}>
