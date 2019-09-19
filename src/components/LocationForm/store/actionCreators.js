@@ -10,19 +10,31 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export const handleSubmitButtonAction = location => {
+  if (!location) {
+    return {
+      type: constants.CHANGE_ERROR,
+      errorCode: 4000000
+    };
+  }
   return async dispatch => {
-    const res = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+    try {
+      const res = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          location
+        )}&key=${googleKey}`
+      );
+      dispatch({
+        type: constants.CHANGE_LOCATION_GEOCODE,
+        locationLat: res.data.results[0].geometry.location.lat,
+        locationLng: res.data.results[0].geometry.location.lng,
         location
-      )}&key=${googleKey}`
-    );
-
-    dispatch({
-      type: constants.CHANGE_LOCATION_GEOCODE,
-      locationLat: res.data.results[0].geometry.location.lat,
-      locationLng: res.data.results[0].geometry.location.lng,
-      location
-    });
+      });
+    } catch (error) {
+      dispatch({
+        type: constants.CHANGE_ERROR,
+        errorCode: 4000001
+      });
+    }
   };
 };
 
@@ -38,4 +50,8 @@ export const handleSuggestedInputAction = addressSuggested => ({
 
 export const handleResetButtonClickAction = () => ({
   type: constants.RESET_DATA
+});
+
+export const handleLoaderAction = () => ({
+  type: constants.TOGGLE_LOADER
 });

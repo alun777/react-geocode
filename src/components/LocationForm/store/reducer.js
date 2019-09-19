@@ -11,7 +11,8 @@ const defaultState = fromJS({
   ],
   locationEntered: '',
   addressSuggested: '',
-  error: null
+  errorCode: false,
+  loader: false
 });
 
 export default (state = defaultState, action) => {
@@ -29,10 +30,18 @@ export default (state = defaultState, action) => {
         .setIn(['location', listNum1, 'lat'], action.locationLat)
         .setIn(['location', listNum1, 'lng'], action.locationLng)
         .set('addressSuggested', '')
-        .set('locationEntered', '');
+        .set('locationEntered', '')
+        .set('errorCode', false)
+        .set('loader', false);
 
     case constants.RESET_DATA:
       return defaultState;
+
+    case constants.CHANGE_ERROR:
+      return state.set('errorCode', action.errorCode);
+
+    case constants.TOGGLE_LOADER:
+      return state.set('loader', true);
     default:
       return state;
   }

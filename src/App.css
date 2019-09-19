@@ -6,3 +6,11 @@
     flex-wrap: nowrap;
   }
 }
+
+.app__container {
+  margin-top: 50px;
+}
+
+.default__message {
+  margin-bottom: 70px !important;
+}

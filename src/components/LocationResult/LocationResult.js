@@ -6,7 +6,7 @@ import { Message } from 'semantic-ui-react';
 
 import LocationResultItem from '../LocationResultItem/LocationResultItem';
 
-const LocationResult = ({ locationGeoCode }) => {
+const LocationResult = ({ locationGeoCode, loader, errorCode }) => {
   //do not show default location if user has an input
   if (locationGeoCode.length > 1) {
     locationGeoCode.splice(0, 1);
@@ -14,7 +14,13 @@ const LocationResult = ({ locationGeoCode }) => {
 
   return (
     <Message>
-      <Message.Header>Result:</Message.Header>
+      <Message.Header>
+        Result: &nbsp;
+        {loader && !errorCode && (
+          <div className='ui active inline loader small'></div>
+        )}
+      </Message.Header>
+      <br />
       <br />
 
       {locationGeoCode.map((item, index) => {
@@ -27,7 +33,9 @@ const LocationResult = ({ locationGeoCode }) => {
 };
 
 export const mapStateToProps = state => ({
-  locationGeoCode: state.getIn(['LocationForm', 'location']).toJS()
+  locationGeoCode: state.getIn(['LocationForm', 'location']).toJS(),
+  loader: state.getIn(['LocationForm', 'loader']),
+  errorCode: state.getIn(['LocationForm', 'errorCode'])
 });
 
 LocationResult.propTypes = {};

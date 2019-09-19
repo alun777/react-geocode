@@ -6,7 +6,6 @@ import { actionCreators } from './store/index';
 import LocationInput from '../LocationInput/LocationInput';
 import LocationButton from '../LocationButton/LocationButton';
 import LocationResult from '../LocationResult/LocationResult';
-import DefaultMessage from '../DefaultMessage/DefaultMessage';
 
 import { Container, Header, Message, Form } from 'semantic-ui-react';
 
@@ -14,35 +13,54 @@ const LocationForm = ({
   onSubmit,
   locationEntered,
   addressSuggested,
-  fn1,
   handleInputChange,
-  handleResetButtonClick
+  handleResetButtonClick,
+  handleAutoComplete,
+  errorCode
 }) => {
   return (
     <Fragment>
-      <Container>
+      <Container className='app__container'>
         <Header as='h1' dividing>
-          A sample form with Semantic UI React and Redux Form
+          Get Lat Long Coordinates from Address
         </Header>
-        <Message info>
-          <DefaultMessage>
-            <p>
-              The source code can be found{' '}
-              <a
-                href='https://redux-form.com/7.4.2/docs/api/field.md/#2-a-stateless-function'
-                target='_blank'
-              >
-                HERE
-              </a>
-              .
-            </p>
-          </DefaultMessage>
+        <Message info className='default__message'>
+          <p>
+            The source code of this tool can be found{' '}
+            <a
+              href='https://redux-form.com/7.4.2/docs/api/field.md/#2-a-stateless-function'
+              target='_blank'
+            >
+              HERE
+            </a>
+            .
+          </p>
         </Message>
+
         <Form
           onSubmit={event => onSubmit(event, locationEntered, addressSuggested)}
         >
+          <div
+            className='field'
+            style={
+              errorCode
+                ? { opacity: 0.9, margin: 0 }
+                : { opacity: 0, margin: 0 }
+            }
+          >
+            <div className='ui red pointing below basic label'>
+              Error:
+              {(errorCode === 4000000 &&
+                ' empty address has no coordinates...') ||
+                (errorCode === 4000001 &&
+                  ' address not valid, try something else...')}
+            </div>
+          </div>
           <Form.Group id='noWrap'>
-            <LocationInput fn1={fn1} handleInputChange={handleInputChange} />
+            <LocationInput
+              handleInputChange={handleInputChange}
+              handleAutoComplete={handleAutoComplete}
+            />
             <LocationButton handleResetButtonClick={handleResetButtonClick} />
           </Form.Group>
         </Form>
@@ -54,11 +72,18 @@ const LocationForm = ({
 
 export const mapStateToProps = state => ({
   locationEntered: state.getIn(['LocationForm', 'locationEntered']),
-  addressSuggested: state.getIn(['LocationForm', 'addressSuggested'])
+  addressSuggested: state.getIn(['LocationForm', 'addressSuggested']),
+  errorCode: state.getIn(['LocationForm', 'errorCode'])
 });
 
 export const mapDispatchToProps = dispatch => ({
-  handleInputChange(event, autocompleteInput) {
+  handleInputChange(event) {
+    event.persist();
+
+    //dispatch user's own input
+    dispatch(actionCreators.handleInputChangeAction(event));
+  },
+  handleAutoComplete(event, autocompleteInput) {
     event.persist();
 
     //create Google address drop-down
@@ -80,15 +105,14 @@ export const mapDispatchToProps = dispatch => ({
     autocomplete.addListener('place_changed', () =>
       handleSuggestedInput(dispatch)
     );
-
-    //dispatch user's own input
-    dispatch(actionCreators.handleInputChangeAction(event));
   },
   onSubmit(event, locationEntered, addressSuggested) {
     event.preventDefault();
 
-    const location = addressSuggested || locationEntered;
+    //dispatch action to toggle loader
+    dispatch(actionCreators.handleLoaderAction());
 
+    const location = addressSuggested || locationEntered;
     dispatch(actionCreators.handleSubmitButtonAction(location));
   },
   handleResetButtonClick() {
