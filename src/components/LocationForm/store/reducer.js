@@ -6,11 +6,12 @@ const defaultState = fromJS({
     {
       address: 'Google, 111 8th Ave, New York, NY 10011, USA',
       lat: '40.7414688',
-      lap: '-74.0033873'
+      lng: '-74.0033873'
     }
   ],
   locationEntered: '',
-  addressSuggested: ''
+  addressSuggested: '',
+  error: null
 });
 
 export default (state = defaultState, action) => {
@@ -26,10 +27,12 @@ export default (state = defaultState, action) => {
       return state
         .setIn(['location', listNum1, 'address'], action.location)
         .setIn(['location', listNum1, 'lat'], action.locationLat)
-        .setIn(['location', listNum1, 'lap'], action.locationLng)
+        .setIn(['location', listNum1, 'lng'], action.locationLng)
         .set('addressSuggested', '')
         .set('locationEntered', '');
 
+    case constants.RESET_DATA:
+      return defaultState;
     default:
       return state;
   }

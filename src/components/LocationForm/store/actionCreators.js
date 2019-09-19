@@ -26,11 +26,6 @@ export const handleSubmitButtonAction = location => {
   };
 };
 
-// export const handleSuggestedInputAction = addressSuggested => ({
-//   type: constants.CHANGE_SUGGESTED_ADDRESS,
-//   addressSuggested
-// });
-
 export const handleInputChangeAction = event => ({
   type: constants.CHANGE_LOCATION_INPUT,
   event
@@ -39,4 +34,8 @@ export const handleInputChangeAction = event => ({
 export const handleSuggestedInputAction = addressSuggested => ({
   type: constants.CHANGE_SUGGESTED_ADDRESS,
   addressSuggested
+});
+
+export const handleResetButtonClickAction = () => ({
+  type: constants.RESET_DATA
 });

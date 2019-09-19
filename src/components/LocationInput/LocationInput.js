@@ -2,10 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const LocationInput = ({ locationEntered, handleInputChange, fn1 }) => {
+const LocationInput = ({ locationEntered, handleInputChange, fn1, error }) => {
   let autocompleteInput = React.createRef();
+
   return (
-    <div className='ui input field eight wide'>
+    <div
+      className={
+        error == !null
+          ? 'ui input field eight wide error'
+          : 'ui input field eight wide'
+      }
+    >
       <input
         type='text'
         ref={autocompleteInput}
@@ -20,7 +27,8 @@ const LocationInput = ({ locationEntered, handleInputChange, fn1 }) => {
 };
 
 export const mapStateToProps = state => ({
-  locationEntered: state.getIn(['LocationForm', 'locationEntered'])
+  locationEntered: state.getIn(['LocationForm', 'locationEntered']),
+  error: state.getIn(['LocationForm', 'error'])
 });
 
 LocationInput.propTypes = {

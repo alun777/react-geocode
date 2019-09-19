@@ -6,28 +6,28 @@ import { Message } from 'semantic-ui-react';
 
 import LocationResultItem from '../LocationResultItem/LocationResultItem';
 
-const LocationResult = ({
-  locationGeoCode,
-  locationEntered,
-  addressSuggested
-}) => {
+const LocationResult = ({ locationGeoCode }) => {
+  //do not show default location if user has an input
+  if (locationGeoCode.length > 1) {
+    locationGeoCode.splice(0, 1);
+  }
+
   return (
     <Message>
-      <Message.Header>Form data:</Message.Header>
+      <Message.Header>Result:</Message.Header>
+      <br />
 
-      <LocationResultItem
-        addressSuggested={addressSuggested}
-        locationEntered={locationEntered}
-        locationGeoCode={locationGeoCode}
-      ></LocationResultItem>
+      {locationGeoCode.map((item, index) => {
+        return (
+          <LocationResultItem key={index} item={item}></LocationResultItem>
+        );
+      })}
     </Message>
   );
 };
 
 export const mapStateToProps = state => ({
-  locationGeoCode: state.getIn(['LocationForm', 'location']).toJS(),
-  locationEntered: state.getIn(['LocationInput', 'locationEntered']),
-  addressSuggested: state.getIn(['LocationInput', 'addressSuggested'])
+  locationGeoCode: state.getIn(['LocationForm', 'location']).toJS()
 });
 
 LocationResult.propTypes = {};
