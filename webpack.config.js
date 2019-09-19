@@ -41,7 +41,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(eot|ttf|svg|woff|woff2)$/,
+        test: /\.(eot|ttf|ico|svg|woff|woff2)$/,
         use: {
           loader: 'file-loader'
         }
@@ -50,7 +50,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html'
+      template: 'src/index.html',
+      favicon: 'src/images/favicon.ico'
     }),
     new CleanWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
