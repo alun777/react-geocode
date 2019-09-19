@@ -1,12 +1,8 @@
 import { constants } from './index';
 import axios from 'axios';
 
-// export const handleSubmitButtonAction = () => ({
-//   type: constants.GET_LOCATION_GEOCODE,
-//   event
-// });
-
 let googleKey;
+
 if (process.env.NODE_ENV !== 'production') {
   googleKey = process.env.REACT_APP_GOOGLE_API_KEY_DEV;
 } else {
@@ -24,7 +20,23 @@ export const handleSubmitButtonAction = location => {
     dispatch({
       type: constants.CHANGE_LOCATION_GEOCODE,
       locationLat: res.data.results[0].geometry.location.lat,
-      locationLng: res.data.results[0].geometry.location.lng
+      locationLng: res.data.results[0].geometry.location.lng,
+      location
     });
   };
 };
+
+// export const handleSuggestedInputAction = addressSuggested => ({
+//   type: constants.CHANGE_SUGGESTED_ADDRESS,
+//   addressSuggested
+// });
+
+export const handleInputChangeAction = event => ({
+  type: constants.CHANGE_LOCATION_INPUT,
+  event
+});
+
+export const handleSuggestedInputAction = addressSuggested => ({
+  type: constants.CHANGE_SUGGESTED_ADDRESS,
+  addressSuggested
+});

@@ -1,11 +1,8 @@
-import React, { Fragment, Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actionCreators } from './store/index';
 
-import { Form } from 'semantic-ui-react';
-
-const LocationInput = ({ locationEntered, handleInputChange }) => {
+const LocationInput = ({ locationEntered, handleInputChange, fn1 }) => {
   let autocompleteInput = React.createRef();
   return (
     <div className='ui input field eight wide'>
@@ -16,27 +13,14 @@ const LocationInput = ({ locationEntered, handleInputChange }) => {
         name='locationInput'
         id='locationInput'
         value={locationEntered}
-        onChange={event => handleInputChange(event, autocompleteInput)}
+        onChange={event => handleInputChange(event, autocompleteInput, fn1)}
       />
     </div>
   );
 };
 
 export const mapStateToProps = state => ({
-  locationEntered: state.getIn(['LocationInput', 'locationEntered'])
-});
-
-export const mapDispatchToProps = dispatch => ({
-  handleInputChange(event, autocompleteInput) {
-    event.persist();
-
-    let autocomplete = new google.maps.places.Autocomplete(
-      autocompleteInput.current
-    );
-
-    const action = actionCreators.handleInputChangeAction(event);
-    dispatch(action);
-  }
+  locationEntered: state.getIn(['LocationForm', 'locationEntered'])
 });
 
 LocationInput.propTypes = {
@@ -46,5 +30,5 @@ LocationInput.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(LocationInput);

@@ -7,9 +7,15 @@ import LocationInput from '../LocationInput/LocationInput';
 import LocationButton from '../LocationButton/LocationButton';
 import LocationResult from '../LocationResult/LocationResult';
 
-import { Container, Divider, Header, Message, Form } from 'semantic-ui-react';
+import { Container, Header, Message, Form } from 'semantic-ui-react';
 
-const LocationForm = ({ onSubmit, locationEntered }) => {
+const LocationForm = ({
+  onSubmit,
+  locationEntered,
+  addressSuggested,
+  fn1,
+  handleInputChange
+}) => {
   return (
     <Fragment>
       <Container>
@@ -36,9 +42,11 @@ const LocationForm = ({ onSubmit, locationEntered }) => {
             complexivity.
           </p>
         </Message>
-        <Form onSubmit={event => onSubmit(event, locationEntered)}>
+        <Form
+          onSubmit={event => onSubmit(event, locationEntered, addressSuggested)}
+        >
           <Form.Group id='noWrap'>
-            <LocationInput />
+            <LocationInput fn1={fn1} handleInputChange={handleInputChange} />
             <LocationButton />
           </Form.Group>
         </Form>
@@ -49,14 +57,45 @@ const LocationForm = ({ onSubmit, locationEntered }) => {
 };
 
 export const mapStateToProps = state => ({
-  locationEntered: state.getIn(['LocationInput', 'locationEntered'])
+  locationEntered: state.getIn(['LocationForm', 'locationEntered']),
+  addressSuggested: state.getIn(['LocationForm', 'addressSuggested'])
 });
 
 export const mapDispatchToProps = dispatch => ({
-  onSubmit(event, locationEntered) {
+  handleInputChange(event, autocompleteInput) {
+    event.persist();
+
+    //create Google address drop-down
+    let autocomplete = new google.maps.places.Autocomplete(
+      autocompleteInput.current
+    );
+
+    const handleSuggestedInput = dispatch => {
+      const addressSuggested =
+        autocomplete.getPlace().name +
+        ', ' +
+        autocomplete.getPlace().formatted_address;
+
+      //dispatch Google suggested input
+      dispatch(actionCreators.handleSuggestedInputAction(addressSuggested));
+    };
+
+    //get the input when user selects an address from Google drop-down
+    autocomplete.addListener('place_changed', () =>
+      handleSuggestedInput(dispatch)
+    );
+
+    //dispatch user's own input
+    dispatch(actionCreators.handleInputChangeAction(event));
+  },
+  onSubmit(event, locationEntered, addressSuggested) {
     event.preventDefault();
 
-    const action = actionCreators.handleSubmitButtonAction(locationEntered);
+    const location = addressSuggested || locationEntered;
+
+    console.log(location);
+
+    const action = actionCreators.handleSubmitButtonAction(location);
     dispatch(action);
   }
 });

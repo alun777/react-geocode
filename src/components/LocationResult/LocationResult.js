@@ -4,18 +4,30 @@ import PropTypes from 'prop-types';
 
 import { Message } from 'semantic-ui-react';
 
-const LocationResult = ({ locationGeoCode }) => {
+import LocationResultItem from '../LocationResultItem/LocationResultItem';
+
+const LocationResult = ({
+  locationGeoCode,
+  locationEntered,
+  addressSuggested
+}) => {
   return (
     <Message>
       <Message.Header>Form data:</Message.Header>
-      <div> lat: {locationGeoCode.lat}</div>
-      <div> lng: {locationGeoCode.lng}</div>
+
+      <LocationResultItem
+        addressSuggested={addressSuggested}
+        locationEntered={locationEntered}
+        locationGeoCode={locationGeoCode}
+      ></LocationResultItem>
     </Message>
   );
 };
 
 export const mapStateToProps = state => ({
-  locationGeoCode: state.getIn(['LocationForm', 'location']).toJS()
+  locationGeoCode: state.getIn(['LocationForm', 'location']).toJS(),
+  locationEntered: state.getIn(['LocationInput', 'locationEntered']),
+  addressSuggested: state.getIn(['LocationInput', 'addressSuggested'])
 });
 
 LocationResult.propTypes = {};
