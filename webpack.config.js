@@ -2,21 +2,21 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
-const Dotenv=require('dotenv-webpack')
+const Dotenv = require('dotenv-webpack');
+
+const BUILD_DIR = path.resolve(__dirname, 'build/');
+const SOURCE_DIR = path.resolve(__dirname, 'src/');
 
 module.exports = {
   mode: 'development',
   devtool: 'cheap-module-eval-source-map',
   entry: {
-    main: './src/index.js'
+    main: `${SOURCE_DIR}/index.js`
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: './build',
     open: true,
     port: 3000,
-    proxy: {
-      '/api': 'http://localhost:3000'
-    },
     hot: true
   },
   module: {
@@ -52,8 +52,7 @@ module.exports = {
     new Dotenv()
   ],
   output: {
-    publicPath: '/',
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: BUILD_DIR
   }
 };

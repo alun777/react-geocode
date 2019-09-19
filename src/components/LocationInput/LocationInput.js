@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actionCreators } from './store/index';
 
-import { Input } from 'antd';
-
 const LocationInput = ({ locationEntered, handleInputChange }) => {
   const autocompleteInput = React.createRef();
   return (
     <Fragment>
       <input
+        className='form__input'
         ref={autocompleteInput}
         placeholder='Please enter location here'
         name='autocomplete'
@@ -17,7 +16,6 @@ const LocationInput = ({ locationEntered, handleInputChange }) => {
         value={locationEntered}
         onChange={event => handleInputChange(event, autocompleteInput)}
       />
-      <div>123</div>
     </Fragment>
   );
 };

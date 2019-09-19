@@ -10,10 +10,16 @@ import LocationResult from '../LocationResult/LocationResult';
 const LocationForm = ({ onSubmit, locationEntered }) => {
   return (
     <Fragment>
-      <div className='form__container'>
-        <form onSubmit={event => onSubmit(event, locationEntered)}>
-          <LocationInput />
-          <LocationButton />
+      <div>
+        <form
+          onSubmit={event => onSubmit(event, locationEntered)}
+          className='form__container'
+        >
+          <div className='form2'>
+            <LocationInput />
+            <LocationButton />
+          </div>
+
           <LocationResult />
         </form>
       </div>

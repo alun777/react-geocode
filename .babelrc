@@ -14,15 +14,5 @@
     "test": {
       "plugins": ["require-context-hook", "@babel/plugin-transform-runtime"]
     }
-  },
-  "plugins": [
-    [
-      "import",
-      {
-        "libraryName": "antd",
-        "libraryDirectory": "es",
-        "style": "css"
-      }
-    ]
-  ]
+  }
 }

@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const LocationButton = props => {
+const LocationButton = () => {
   return (
-    <div>
-      <button>submit</button>
+    <div className='form__button'>
+      <button>Submit</button>
     </div>
   );
 };
-
-LocationButton.propTypes = {};
 
 export default LocationButton;
