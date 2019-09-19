@@ -6,7 +6,8 @@ const LocationInput = ({
   locationEntered,
   handleInputChange,
   errorCode,
-  handleAutoComplete
+  handleAutoComplete,
+  handleInputBlur
 }) => {
   let autocompleteInput = React.createRef();
 
@@ -24,10 +25,10 @@ const LocationInput = ({
           ref={autocompleteInput}
           placeholder='Please enter location here'
           name='locationInput'
-          id='locationInput'
+          id='autocomplete'
           value={locationEntered}
           onFocus={event => handleAutoComplete(event, autocompleteInput)}
-          onChange={event => handleInputChange(event, autocompleteInput)}
+          onChange={event => handleInputChange(event)}
         />
       </div>
     </Fragment>

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actionCreators } from './store/index';
@@ -16,7 +16,8 @@ const LocationForm = ({
   handleInputChange,
   handleResetButtonClick,
   handleAutoComplete,
-  errorCode
+  errorCode,
+  handleInputBlur
 }) => {
   return (
     <Fragment>
@@ -27,10 +28,7 @@ const LocationForm = ({
         <Message info className='default__message'>
           <p>
             The source code of this tool can be found{' '}
-            <a
-              href='https://redux-form.com/7.4.2/docs/api/field.md/#2-a-stateless-function'
-              target='_blank'
-            >
+            <a href='https://github.com/alun777/react-geocode' target='_blank'>
               HERE
             </a>
             .
@@ -60,10 +58,12 @@ const LocationForm = ({
             <LocationInput
               handleInputChange={handleInputChange}
               handleAutoComplete={handleAutoComplete}
+              handleInputBlur={handleInputBlur}
             />
             <LocationButton handleResetButtonClick={handleResetButtonClick} />
           </Form.Group>
         </Form>
+        <br />
         <LocationResult />
       </Container>
     </Fragment>
@@ -77,6 +77,9 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = dispatch => ({
+  handleInputBlur(autocompleteInput) {
+    // google.maps.event.clearInstanceListeners(autocompleteInput.current);
+  },
   handleInputChange(event) {
     event.persist();
 
@@ -84,9 +87,9 @@ export const mapDispatchToProps = dispatch => ({
     dispatch(actionCreators.handleInputChangeAction(event));
   },
   handleAutoComplete(event, autocompleteInput) {
-    event.persist();
-
     //create Google address drop-down
+    console.log(google.maps.places.Autocomplete);
+
     let autocomplete = new google.maps.places.Autocomplete(
       autocompleteInput.current
     );
@@ -99,6 +102,7 @@ export const mapDispatchToProps = dispatch => ({
 
       //dispatch Google suggested input
       dispatch(actionCreators.handleSuggestedInputAction(addressSuggested));
+      google.maps = null;
     };
 
     //get the input when user selects an address from Google drop-down

@@ -1,4 +1,4 @@
-# Contact Keeper
+# Geocode
 
 React (client-side) application to get lat&long from address.
 
