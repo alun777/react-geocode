@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-
 import { Form } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 const LocationButton = ({ handleResetButtonClick }) => {
   return (
@@ -12,6 +11,10 @@ const LocationButton = ({ handleResetButtonClick }) => {
       </Form.Button>
     </Fragment>
   );
+};
+
+LocationButton.propTypes = {
+  handleResetButtonClick: PropTypes.func.isRequired
 };
 
 export default LocationButton;

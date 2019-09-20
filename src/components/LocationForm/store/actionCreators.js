@@ -9,25 +9,33 @@ if (process.env.NODE_ENV !== 'production') {
   googleKey = process.env.REACT_APP_GOOGLE_API_KEY;
 }
 
-export const handleSubmitButtonAction = location => {
-  if (!location) {
+export const handleSubmitButtonAction = (locationEntered, addressSuggested) => {
+  if (!locationEntered) {
     return {
       type: constants.CHANGE_ERROR,
       errorCode: 4000000
     };
   }
+
+  if (!addressSuggested) {
+    return {
+      type: constants.CHANGE_ERROR,
+      errorCode: 4000002
+    };
+  }
+
   return async dispatch => {
     try {
       const res = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-          location
+          addressSuggested
         )}&key=${googleKey}`
       );
       dispatch({
         type: constants.CHANGE_LOCATION_GEOCODE,
         locationLat: res.data.results[0].geometry.location.lat,
         locationLng: res.data.results[0].geometry.location.lng,
-        location
+        addressSuggested
       });
     } catch (error) {
       dispatch({

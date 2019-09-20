@@ -1,13 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { actionCreators } from './store/index';
+import { Container, Header, Message, Form } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 import LocationInput from '../LocationInput/LocationInput';
 import LocationButton from '../LocationButton/LocationButton';
 import LocationResult from '../LocationResult/LocationResult';
-
-import { Container, Header, Message, Form } from 'semantic-ui-react';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const LocationForm = ({
   onSubmit,
@@ -16,8 +16,7 @@ const LocationForm = ({
   handleInputChange,
   handleResetButtonClick,
   handleAutoComplete,
-  errorCode,
-  handleInputBlur
+  errorCode
 }) => {
   return (
     <Fragment>
@@ -34,31 +33,14 @@ const LocationForm = ({
             .
           </p>
         </Message>
-
         <Form
           onSubmit={event => onSubmit(event, locationEntered, addressSuggested)}
         >
-          <div
-            className='field'
-            style={
-              errorCode
-                ? { opacity: 0.9, margin: 0 }
-                : { opacity: 0, margin: 0 }
-            }
-          >
-            <div className='ui red pointing below basic label'>
-              Error:
-              {(errorCode === 4000000 &&
-                ' empty address has no coordinates...') ||
-                (errorCode === 4000001 &&
-                  ' address not valid, try something else...')}
-            </div>
-          </div>
+          <ErrorMessage errorCode={errorCode} />
           <Form.Group id='noWrap'>
             <LocationInput
               handleInputChange={handleInputChange}
               handleAutoComplete={handleAutoComplete}
-              handleInputBlur={handleInputBlur}
             />
             <LocationButton handleResetButtonClick={handleResetButtonClick} />
           </Form.Group>
@@ -77,24 +59,26 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = dispatch => ({
-  handleInputBlur(autocompleteInput) {
-    // google.maps.event.clearInstanceListeners(autocompleteInput.current);
-  },
   handleInputChange(event) {
     event.persist();
 
     //dispatch user's own input
     dispatch(actionCreators.handleInputChangeAction(event));
   },
-  handleAutoComplete(event, autocompleteInput) {
+  handleAutoComplete(autocompleteInput) {
     //create Google address drop-down
-    console.log(google.maps.places.Autocomplete);
-
-    let autocomplete = new google.maps.places.Autocomplete(
-      autocompleteInput.current
-    );
+    let autocomplete;
+    if (google.maps) {
+      autocomplete = new google.maps.places.Autocomplete(
+        autocompleteInput.current
+      );
+      autocomplete.addListener('place_changed', () =>
+        handleSuggestedInput(dispatch)
+      );
+    }
 
     const handleSuggestedInput = dispatch => {
+      //get selected address from drop-down
       const addressSuggested =
         autocomplete.getPlace().name +
         ', ' +
@@ -102,13 +86,10 @@ export const mapDispatchToProps = dispatch => ({
 
       //dispatch Google suggested input
       dispatch(actionCreators.handleSuggestedInputAction(addressSuggested));
+
+      //avoid generating many Google Autocomplete service
       google.maps = null;
     };
-
-    //get the input when user selects an address from Google drop-down
-    autocomplete.addListener('place_changed', () =>
-      handleSuggestedInput(dispatch)
-    );
   },
   onSubmit(event, locationEntered, addressSuggested) {
     event.preventDefault();
@@ -116,14 +97,26 @@ export const mapDispatchToProps = dispatch => ({
     //dispatch action to toggle loader
     dispatch(actionCreators.handleLoaderAction());
 
-    const location = addressSuggested || locationEntered;
-    dispatch(actionCreators.handleSubmitButtonAction(location));
+    //dispatch input result
+    dispatch(
+      actionCreators.handleSubmitButtonAction(locationEntered, addressSuggested)
+    );
   },
   handleResetButtonClick() {
     // dispatch action to reset all
     dispatch(actionCreators.handleResetButtonClickAction());
   }
 });
+
+LocationForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  locationEntered: PropTypes.string.isRequired,
+  addressSuggested: PropTypes.string.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  handleResetButtonClick: PropTypes.func.isRequired,
+  handleAutoComplete: PropTypes.func.isRequired,
+  errorCode: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
+};
 
 export default connect(
   mapStateToProps,

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const LocationResultItem = ({ locationGeoCode, item }) => {
   return (
@@ -7,7 +8,6 @@ const LocationResultItem = ({ locationGeoCode, item }) => {
       {locationGeoCode.length === 1 && (
         <div className='ui blue'>Here is an example:</div>
       )}
-
       <div> Address => {item.address}</div>
       <div> Latitude => {item.lat}</div>
       <div> Longitude => {item.lng}</div>
@@ -16,11 +16,14 @@ const LocationResultItem = ({ locationGeoCode, item }) => {
   );
 };
 
-LocationResultItem.propTypes = {};
-
 export const mapStateToProps = state => ({
   locationGeoCode: state.getIn(['LocationForm', 'location']).toJS()
 });
+
+LocationResultItem.propTypes = {
+  locationGeoCode: PropTypes.array.isRequired,
+  item: PropTypes.object.isRequired
+};
 
 export default connect(
   mapStateToProps,

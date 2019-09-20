@@ -1,37 +1,34 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const LocationInput = ({
   locationEntered,
   handleInputChange,
-  errorCode,
   handleAutoComplete,
-  handleInputBlur
+  errorCode
 }) => {
   let autocompleteInput = React.createRef();
 
   return (
-    <Fragment>
-      <div
-        className={
-          errorCode
-            ? 'ui input field eight wide error'
-            : 'ui input field eight wide'
-        }
-      >
-        <input
-          type='text'
-          ref={autocompleteInput}
-          placeholder='Please enter location here'
-          name='locationInput'
-          id='autocomplete'
-          value={locationEntered}
-          onFocus={event => handleAutoComplete(event, autocompleteInput)}
-          onChange={event => handleInputChange(event)}
-        />
-      </div>
-    </Fragment>
+    <div
+      className={
+        errorCode
+          ? 'ui input field eight wide error'
+          : 'ui input field eight wide'
+      }
+    >
+      <input
+        type='text'
+        ref={autocompleteInput}
+        placeholder='Please enter location here'
+        name='autocomplete'
+        id='autocomplete'
+        value={locationEntered}
+        onFocus={() => handleAutoComplete(autocompleteInput)}
+        onChange={event => handleInputChange(event)}
+      />
+    </div>
   );
 };
 
@@ -42,7 +39,9 @@ export const mapStateToProps = state => ({
 
 LocationInput.propTypes = {
   locationEntered: PropTypes.string,
-  handleInputChange: PropTypes.func.isRequired
+  handleInputChange: PropTypes.func.isRequired,
+  handleAutoComplete: PropTypes.func.isRequired,
+  errorCode: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
 };
 
 export default connect(

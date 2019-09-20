@@ -8,7 +8,7 @@ Stack and tools:
 -  immutable.js
 -  Semantic UI
 
-Hosted here: []()
+Hosted here: [https://alun777.github.io/react-geocode/](https://alun777.github.io/react-geocode/)
 
 ## Install dependencies
 
@@ -21,6 +21,12 @@ npm install
 ```bash
 npm run start:dev    # http://localhost:3000
 ```
+
+#### Google API Key
+
+API has been restricted to HTTP referrer
+
+Change your own key in `.env` if needed
 
 #### Author
 Chao YIN

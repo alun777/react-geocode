@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { Message } from 'semantic-ui-react';
 
 import LocationResultItem from '../LocationResultItem/LocationResultItem';
@@ -38,7 +37,11 @@ export const mapStateToProps = state => ({
   errorCode: state.getIn(['LocationForm', 'errorCode'])
 });
 
-LocationResult.propTypes = {};
+LocationResult.propTypes = {
+  locationGeoCode: PropTypes.array.isRequired,
+  loader: PropTypes.bool.isRequired,
+  errorCode: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
+};
 
 export default connect(
   mapStateToProps,

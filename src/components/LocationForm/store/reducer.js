@@ -26,7 +26,7 @@ export default (state = defaultState, action) => {
     case constants.CHANGE_LOCATION_GEOCODE:
       let listNum1 = state.getIn(['location']).size;
       return state
-        .setIn(['location', listNum1, 'address'], action.location)
+        .setIn(['location', listNum1, 'address'], action.addressSuggested)
         .setIn(['location', listNum1, 'lat'], action.locationLat)
         .setIn(['location', listNum1, 'lng'], action.locationLng)
         .set('addressSuggested', '')
